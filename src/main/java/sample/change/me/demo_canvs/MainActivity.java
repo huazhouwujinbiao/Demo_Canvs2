@@ -109,6 +109,10 @@ public class MainActivity extends Activity {
                         {
                             begin= (int) (X-170);
                         }
+                        if(X > 330 - range && X < 350)
+                        {
+                            begin= (int) (X-150);
+                        }
                         // 指向正东
                         if(X > 90 - range && X < 90 + range)
                         {
@@ -118,6 +122,10 @@ public class MainActivity extends Activity {
                         if(X > 180 - range && X < 180 + range)
                         {
                             begin= (int) (X-deg);
+                        }
+                        if(X > 190 && X < 207 )
+                        {
+                            begin= (int) (X-deg-20);
                         }
                         // 指向正西
                         if(X > 270 - range && X < 270 + range)
@@ -188,13 +196,13 @@ public class MainActivity extends Activity {
             paint.setStyle(Paint.Style.STROKE);
             canvas.translate(canvas.getWidth()/2, canvas.getHeight()/2); //将画布移动到屏幕中心
             canvas.drawCircle(0, 0, 300, paint); //画圆圈
-
             Paint tmpPaint = new Paint(paint); //小刻度画笔对象
             tmpPaint.setStrokeWidth(1);//设置画笔笔尖的粗细
             float  y=300;   //向Y方向移动画笔的位置
+            float  x=300;   //向X方向移动画笔的位置
             int count = 360; //总刻度数
-
-            canvas.rotate(180+360/12,0f,0f); //旋转画纸，使1到12的刻度按钟表习惯写在上面。
+            canvas.save();//各个状态最初，是下次第一个canvas.restore()返回点
+            canvas.rotate(begin,0f,0f); //旋转画纸，使1到12的刻度按钟表习惯写在上面。
             for(int i=0 ; i <count ; i++){
                 if(i%5 == 0){
                     //60份里面5的倍数就是1-12，所以比其他刻度画得长一点，y加减控制刻度长度
@@ -207,7 +215,7 @@ public class MainActivity extends Activity {
                 //每一个循环就旋转一个刻度，可以想象一下就是笔不动，下面的纸旋转，那么下一次画的位置就发生改变了
                 canvas.rotate(360/count,0f,0f); //旋转画纸
             }
-            canvas.save();//各个状态最初，是下次第一个canvas.restore()返回点
+            canvas.restore();
             //绘制钟表的中心点
             tmpPaint.setColor(Color.GRAY);
             //设置画笔宽度
@@ -221,7 +229,7 @@ public class MainActivity extends Activity {
             tmpPaint.setColor(Color.RED);
             //设置画笔宽度
             tmpPaint.setStrokeWidth(6);
-            canvas.rotate(begin,0f,0f); //旋转画纸,每秒旋转360/12/5度
+            canvas.rotate(begin+210,0f,0f); //旋转画纸,每秒旋转360/12/5度
             canvas.drawLine(0, -10, 0, 250, tmpPaint);
             canvas.rotate(360/12/5);
             //设置这个是为了避免上面一系列的计算的时间影响
@@ -232,6 +240,9 @@ public class MainActivity extends Activity {
             tmpPaint.setStrokeWidth(10);
             tmpPaint.setColor(Color.WHITE);
             canvas.drawText("South", 0f, y+50f, tmpPaint);
+            canvas.drawText("North", -50f, -y-50f, tmpPaint);
+            canvas.drawText("East", x+50f, -40f, tmpPaint);
+            canvas.drawText("West", -x-100f, 50f, tmpPaint);
         }
     }
 }
